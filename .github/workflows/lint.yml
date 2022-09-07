@@ -6,6 +6,7 @@ on:
     branches:
       - master
       - main
+      - import_state_check
   pull_request:
 jobs:
   golangci:

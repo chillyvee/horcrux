@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - import_state_check
     paths:
       - '**.go'
       - '**.mod'
