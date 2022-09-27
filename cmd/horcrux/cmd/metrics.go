@@ -37,13 +37,14 @@ func AddPrometheusMetrics(mux *http.ServeMux) {
 	logger.Info("Prometheus Metrics Listening", "address", config.Config.DebugListenAddress, "path", "/metrics")
 }
 
-func EnableDebugAndMetrics() error {
+// EnableDebugAndMetrics - Initialization errors are not fatal, only logged
+func EnableDebugAndMetrics() {
 	logger := tmlog.NewTMLogger(tmlog.NewSyncWriter(os.Stdout)).With("module", "debugserver")
 
 	// Configure Shared Debug HTTP Server for pprof and prometheus
 	if len(config.Config.DebugListenAddress) == 0 {
 		logger.Error("debug-listen-address not defined")
-		return fmt.Errorf("debug-listen-address not defined")
+		return
 	}
 	logger.Info("Debug Server Listening", "address", config.Config.DebugListenAddress)
 
@@ -77,7 +78,6 @@ func EnableDebugAndMetrics() error {
 	// Start Debug Server.
 	if err := srv.ListenAndServe(); err != nil {
 		logger.Error(fmt.Sprintf("Debug Endpoint failed to start: %s", err))
-		return err
+		return
 	}
-	return nil
 }
